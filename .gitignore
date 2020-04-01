@@ -38,3 +38,5 @@ reports/
 !.gitkeep
 !.travis.yml
 !src/imio
+pyvenv.cfg
+share/
