@@ -61,7 +61,7 @@ class ImioPrometheus(Prometheus):
                 "Thread {0}{1}:\n{2}".format(thread_id, str(reqinfo), output.getvalue())
             )
 
-        busy_count, request_queue_count, free_count = [len(l) for l in handler_lists]
+        # busy_count, request_queue_count, free_count = [len(l) for l in handler_lists]
         return [
             metric(
                 "zope_total_threads",
