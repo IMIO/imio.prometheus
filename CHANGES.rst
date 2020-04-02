@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0a2 (unreleased)
+1.0a2 (2020-04-02)
 ------------------
 
 - Add type and help text.
