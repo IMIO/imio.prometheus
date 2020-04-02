@@ -5,7 +5,8 @@ Changelog
 1.0a4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add docker-compose name on label.
+  [bsuttor]
 
 
 1.0a3 (2020-04-02)

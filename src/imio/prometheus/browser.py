@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 from collective.prometheus.browser import Prometheus
-from io import StringIO
-from time import strftime
 from time import time
 from ZODB.ActivityMonitor import ActivityMonitor
 
 import os
-import sys
-import threading
-import traceback
 
 
-def metric(name, args, value, metric_type, help_text):
+def metric(name, value, metric_type, help_text, labels={}):
     HELP_TMPL = "# HELP {0} {1}\n"
     TYPE_TMPL = "# TYPE {0} {1}\n"
     output = ""
@@ -19,7 +14,16 @@ def metric(name, args, value, metric_type, help_text):
         output += HELP_TMPL.format(name, help_text)
     if metric_type is not None:
         output += TYPE_TMPL.format(name, metric_type)
-    output += "{0}{{{1}}} {2}\n".format(name, args, value)
+    output += "{0}{{{1}}} {2}\n".format(
+        name,
+        ",".join(
+            [
+                '{0}="{1}"'.format(label_name, label_value)
+                for label_name, label_value in labels.items()
+            ]
+        ),
+        value,
+    )
     return output
 
 
@@ -29,78 +33,28 @@ class ImioPrometheus(Prometheus):
         # metrics += "".join(self.zopethreads())
         return metrics
 
-    def zopethreads(self):
-        frames = sys._current_frames
-        total_threads = len(frames())
-        this_thread_id = threading.get_ident()
-        now = strftime("%Y-%m-%d %H:%M:%S")
-        res = ["Threads traceback dump at {0}\n".format(now)]
-
-        for thread_id, frame in frames().items():
-            if thread_id == this_thread_id:
-                continue
-            # Find request in frame
-            reqinfo = ""
-            f = frame
-            while f is not None:
-                request = f.f_locals.get("request")
-                if request is not None:
-                    reqmeth = request.get("REQUEST_METHOD", "")
-                    pathinfo = request.get("PATH_INFO", "")
-                    reqinfo = reqmeth + " " + pathinfo
-                    qs = request.get("QUERY_STRING")
-                    if qs:
-                        reqinfo += "?" + qs
-                    break
-                f = f.f_back
-            if reqinfo:
-                reqinfo = " ({0})".format(reqinfo)
-            output = StringIO()
-            traceback.print_stack(frame, file=output)
-            res.append(
-                "Thread {0}{1}:\n{2}".format(thread_id, str(reqinfo), output.getvalue())
-            )
-
-        # busy_count, request_queue_count, free_count = [len(l) for l in handler_lists]
-        return [
-            metric(
-                "zope_total_threads",
-                self.app_id(),
-                total_threads,
-                "gauge",
-                "The number of running Zope threads",
-            ),
-            metric(
-                "zope_free_threads",
-                self.app_id(),
-                "free_count",
-                "gauge",
-                "The number of Zope threads not in use",
-            ),
-        ]
-
     def _zopecache(self, db, suffix):
         return [
             metric(
                 "zope_cache_objects{0}".format(suffix),
-                self.app_id(),
                 db.database_size(),
                 "gauge",
                 "The number of objects in the Zope cache",
+                self.labels(),
             ),
             metric(
                 "zope_cache_memory{0}".format(suffix),
-                self.app_id(),
                 db.cache_length(),
                 "gauge",
                 "Memory used by the Zope cache",
+                self.labels(),
             ),
             metric(
                 "zope_cache_size{0}".format(suffix),
-                self.app_id(),
                 db.cache_size(),
                 "gauge",
                 "The number of objects that can be stored in the Zope cache",
+                self.labels(),
             ),
         ]
 
@@ -117,24 +71,24 @@ class ImioPrometheus(Prometheus):
         return [
             metric(
                 "zodb_connections" + suffix,
-                self.app_id(),
                 data["connections"],
                 "gauge",
                 "ZODB connections",
+                self.labels(),
             ),
             metric(
                 "zodb_load_count" + suffix,
-                self.app_id(),
                 data["loads"],
                 "counter",
                 "ZODB load count",
+                self.labels(),
             ),
             metric(
                 "zodb_store_count" + suffix,
-                self.app_id(),
                 data["stores"],
                 "counter",
                 "ZODB store count",
+                self.labels(),
             ),
         ]
 
@@ -148,23 +102,34 @@ class ImioPrometheus(Prometheus):
         for (conn_id, conn_data) in enumerate(sorted_cache_details):
             total = conn_data.get("size", 0)
             active = metric(
-                "zope_connection_{}_active_objects".format(conn_id),
-                self.app_id(),
+                "zope_connection_{0}_active_objects".format(conn_id),
                 conn_data.get("ngsize", 0),
                 "gauge",
                 "Active Zope Objects",
+                self.labels(),
             )
             result.append(active)
             total = metric(
-                "zope_connection_{}_total_objects".format(conn_id),
-                self.app_id(),
+                "zope_connection_{0}_total_objects".format(conn_id),
                 conn_data.get("size", 0),
                 "gauge",
                 "Total Zope Objects",
+                self.labels(),
             )
             result.append(total)
         return result
 
+    def labels(self):
+        labels = self.app_id()
+        labels.update(self.compose_service())
+        return labels
+
     def app_id(self):
         service_name = os.environ.get("SERVICE_NAME", "local-plone")
-        return 'plone_service_name="{0}"'.format(service_name)
+        return {"plone_service_name": service_name}
+
+    def compose_service(self):
+        hostname = os.environ.get("HOSTNAME", "localhost-instance")
+        if len(hostname.split("-")) > 1:
+            hostname = hostname.split("-")[-1]
+        return {"compose_service": hostname}
