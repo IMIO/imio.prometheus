@@ -5,7 +5,8 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Reformating to add attibutes to metric.
+  [bsuttor]
 
 
 1.0a2 (2020-04-02)
