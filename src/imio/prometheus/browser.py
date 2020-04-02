@@ -16,5 +16,10 @@ class ImioPrometheus(Prometheus):
 
     def app_id(self):
         return [
-            metric("plone_service_name", os.environ.get("SERVICE_NAME", "local-plone"))
+            metric(
+                "plone_service_name",
+                os.environ.get("SERVICE_NAME", "local-plone"),
+                "gauge",
+                "Service name",
+            )
         ]
