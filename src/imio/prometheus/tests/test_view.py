@@ -19,4 +19,9 @@ class TestView(unittest.TestCase):
     def test_mertics(self):
         """Test if imio.prometheus is installed."""
         view = api.content.get_view("metrics", self.zope, self.zope.REQUEST)
-        self.assertEqual(["plone_service_name local-plone\n"], view.app_id())
+        self.assertEqual(
+            [
+                "# HELP plone_service_name Service name\n# TYPE plone_service_name gauge\nplone_service_name local-plone\n"  # noqa
+            ],
+            view.app_id(),
+        )
