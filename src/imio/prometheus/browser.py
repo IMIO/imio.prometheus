@@ -73,7 +73,7 @@ class ImioPrometheus(Prometheus):
             metric(
                 "zope_free_threads",
                 self.app_id(),
-                free_count,
+                "free_count",
                 "gauge",
                 "The number of Zope threads not in use",
             ),
