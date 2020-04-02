@@ -16,7 +16,10 @@ class TestView(unittest.TestCase):
         self.portal = self.layer["portal"]
         self.zope = self.portal.aq_parent
 
-    def test_mertics(self):
+    def test_labels(self):
         """Test if imio.prometheus is installed."""
         view = api.content.get_view("metrics", self.zope, self.zope.REQUEST)
-        self.assertEqual('plone_service_name="local-plone"', view.app_id())
+        self.assertEqual(
+            {"plone_service_name": "local-plone", "compose_service": "instance"},
+            view.labels(),
+        )
