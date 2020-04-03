@@ -5,7 +5,8 @@ Changelog
 1.0a5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add number of zope threads for python 2 instances.
+  [bsuttor]
 
 
 1.0a4 (2020-04-02)

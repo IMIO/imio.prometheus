@@ -4,6 +4,14 @@ from time import time
 from ZODB.ActivityMonitor import ActivityMonitor
 
 import os
+import sys
+
+try:
+    import ZServer.PubCore
+
+    Z_SERVER = True
+except Exception:
+    Z_SERVER = False
 
 
 def metric(name, value, metric_type, help_text, labels={}):
@@ -32,6 +40,38 @@ class ImioPrometheus(Prometheus):
         metrics = super(ImioPrometheus, self).__call__(args, kwargs)
         # metrics += "".join(self.zopethreads())
         return metrics
+
+    def zopethreads(self):
+        if sys.version_info < (2, 5):
+            import threadframe
+
+            thread = threadframe.dict
+        else:
+            thread = sys._current_frames
+        frames = thread()
+        total_threads = len(frames)
+        if ZServer.PubCore._handle is not None:
+            handler_lists = ZServer.PubCore._handle.im_self._lists
+        else:
+            handler_lists = ((), (), ())
+        # Check the ZRendevous __init__ for the definitions below
+        busy_count, request_queue_count, free_count = [len(l) for l in handler_lists]
+        return [
+            metric(
+                "zope_total_threads",
+                total_threads,
+                "gauge",
+                "The number of running Zope threads",
+                self.labels(),
+            ),
+            metric(
+                "zope_free_threads",
+                free_count,
+                "gauge",
+                "The number of Zope threads not in use",
+                self.labels(),
+            ),
+        ]
 
     def _zopecache(self, db, suffix):
         return [
