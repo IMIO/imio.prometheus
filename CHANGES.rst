@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0a5 (unreleased)
+1.0a5 (2020-04-03)
 ------------------
 
 - Add number of zope threads for python 2 instances.
