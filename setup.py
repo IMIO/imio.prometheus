@@ -16,7 +16,7 @@ long_description = "\n\n".join(
 
 setup(
     name="imio.prometheus",
-    version="1.0a5",
+    version="1.0a6.dev0",
     description="Add some iMio informations on prometheus metrics view",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/
