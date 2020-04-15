@@ -20,6 +20,9 @@ class TestView(unittest.TestCase):
         """Test if imio.prometheus is installed."""
         view = api.content.get_view("metrics", self.zope, self.zope.REQUEST)
         self.assertEqual(
-            {"plone_service_name": "local-plone", "compose_service": "instance"},
+            {
+                "plone_service_name": "local-plone",
+                "compose_service": "localhost-instance",
+            },
             view.labels(),
         )
