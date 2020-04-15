@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0a6 (unreleased)
+1.0b1 (2020-04-15)
 ------------------
 
 - Use Hostname to get docker-compose name to become more explicit.
