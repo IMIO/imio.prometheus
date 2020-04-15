@@ -170,6 +170,4 @@ class ImioPrometheus(Prometheus):
 
     def compose_service(self):
         hostname = os.environ.get("HOSTNAME", "localhost-instance")
-        if len(hostname.split("-")) > 1:
-            hostname = hostname.split("-")[-1]
         return {"compose_service": hostname}

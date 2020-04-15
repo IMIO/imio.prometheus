@@ -5,7 +5,8 @@ Changelog
 1.0a6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use Hostname to get docker-compose name to become more explicit.
+  [bsuttor]
 
 
 1.0a5 (2020-04-03)
