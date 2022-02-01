@@ -171,3 +171,14 @@ class ImioPrometheus(Prometheus):
     def compose_service(self):
         hostname = os.environ.get("HOSTNAME", "localhost-instance")
         return {"compose_service": hostname}
+
+    def object_counts(self):
+        return [
+            mertic(
+                "catalog_total_objects",
+                len(api.portal.get_tool("portal_catalog")),
+                "gauge",
+                "Total objects on catalog",
+                self.labels(),
+            )
+        ]
