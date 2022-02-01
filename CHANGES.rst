@@ -5,7 +5,11 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update classifiers to accept python 2.7.
+  [bsuttor & odelaere]
+
+- Add object_counts gauge.
+  [bsuttor]
 
 
 1.0.0 (2020-11-10)
