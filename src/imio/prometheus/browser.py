@@ -27,7 +27,7 @@ def metric(name, value, metric_type, help_text, labels={}):
         ",".join(
             [
                 '{0}="{1}"'.format(label_name, label_value)
-                for label_name, label_value in labels.items()
+                for label_name, label_value in list(labels.items())
             ]
         ),
         value,
@@ -51,7 +51,7 @@ class ImioPrometheus(Prometheus):
         frames = thread()
         total_threads = len(frames)
         if ZServer.PubCore._handle is not None:
-            handler_lists = ZServer.PubCore._handle.im_self._lists
+            handler_lists = ZServer.PubCore._handle.__self__._lists
         else:
             handler_lists = ((), (), ())
         # Check the ZRendevous __init__ for the definitions below
