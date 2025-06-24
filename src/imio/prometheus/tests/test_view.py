@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
-from imio.prometheus.testing import IMIO_PROMETHEUS_INTEGRATION_TESTING  # noqa: E501
+from imio.prometheus.testing import IMIO_PROMETHEUS_INTEGRATION_TESTING
 from plone import api
 
 import unittest

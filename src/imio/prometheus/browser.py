@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.prometheus.browser import Prometheus
+from plone import api
 from time import time
 from ZODB.ActivityMonitor import ActivityMonitor
 
@@ -50,12 +51,12 @@ class ImioPrometheus(Prometheus):
             thread = sys._current_frames
         frames = thread()
         total_threads = len(frames)
-        if ZServer.PubCore._handle is not None:
+        if Z_SERVER and ZServer.PubCore._handle is not None:
             handler_lists = ZServer.PubCore._handle.__self__._lists
         else:
             handler_lists = ((), (), ())
         # Check the ZRendevous __init__ for the definitions below
-        busy_count, request_queue_count, free_count = [len(l) for l in handler_lists]
+        busy_count, request_queue_count, free_count = [len(h) for h in handler_lists]
         return [
             metric(
                 "zope_total_threads",
@@ -174,7 +175,7 @@ class ImioPrometheus(Prometheus):
 
     def object_counts(self):
         return [
-            mertic(
+            metric(
                 "catalog_total_objects",
                 len(api.portal.get_tool("portal_catalog")),
                 "gauge",
