@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.2 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
 - Fix list and `im_self` for Python 3
