@@ -50,7 +50,7 @@ Changelog
 1.0a3 (2020-04-02)
 ------------------
 
-- Reformating to add attibutes to metric.
+- Reformatting to add attributes to metric.
   [bsuttor]
 
 

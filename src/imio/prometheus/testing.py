@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -19,7 +18,7 @@ class ImioPrometheusLayer(PloneSandboxLayer):
         self.loadZCML(package=imio.prometheus)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'imio.prometheus:default')
+        applyProfile(portal, "imio.prometheus:default")
 
 
 IMIO_PROMETHEUS_FIXTURE = ImioPrometheusLayer()
@@ -27,11 +26,11 @@ IMIO_PROMETHEUS_FIXTURE = ImioPrometheusLayer()
 
 IMIO_PROMETHEUS_INTEGRATION_TESTING = IntegrationTesting(
     bases=(IMIO_PROMETHEUS_FIXTURE,),
-    name='ImioPrometheusLayer:IntegrationTesting',
+    name="ImioPrometheusLayer:IntegrationTesting",
 )
 
 
 IMIO_PROMETHEUS_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(IMIO_PROMETHEUS_FIXTURE,),
-    name='ImioPrometheusLayer:FunctionalTesting',
+    name="ImioPrometheusLayer:FunctionalTesting",
 )
