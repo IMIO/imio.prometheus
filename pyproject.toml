@@ -4,7 +4,61 @@
 [build-system]
 requires = ["setuptools>=68.2,<83", "wheel"]
 
+# START-MARKER-MANUAL-CONFIG
+# Anything from here until END-MARKER-MANUAL-CONFIG
+# will be kept by plone.meta
+[project]
+name = "imio.prometheus"
+version = "2.0.0.dev0"
+description = "Add some iMio informations on prometheus metrics view"
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Plone",
+    "Framework :: Plone :: 6.1",
+    "Framework :: Plone :: 6.2",
+    "Framework :: Plone :: Addon",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+license = "GPL-2.0-only"
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Benoît Suttor",email = "benoit.suttor@imio.be"},
+]
+dependencies = [
+    "Products.CMFPlone",
+    "collective.prometheus",
+    "plone.api",
+    "plone.base",
+]
+keywords = ["Python", "Plone"]
 
+[project.scripts]
+update_locale = "imio.prometheus.locales.update:update_locale"
+
+[project.optional-dependencies]
+test = [
+    "plone.app.contenttypes[test]",
+    "plone.app.testing",
+    "plone.testing",
+    "zest.releaser[recommended]",
+    "zestreleaser.towncrier",
+]
+
+[project.urls]
+PyPI = "https://pypi.org/project/imio.prometheus"
+Source = "https://github.com/IMIO/imio.prometheus"
+Issues = "https://github.com/IMIO/imio.prometheus/issues"
+Changelog = "https://github.com/IMIO/imio.prometheus/blob/master/CHANGES.rst"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CONTRIBUTORS.rst", "CHANGES.rst"], content-type = "text/x-rst"}
+# END-MARKER-MANUAL-CONFIG
 
 [tool.towncrier]
 directory = "news/"
