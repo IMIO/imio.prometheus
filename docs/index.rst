@@ -1,5 +1,0 @@
-===============
-imio.prometheus
-===============
-
-User documentation

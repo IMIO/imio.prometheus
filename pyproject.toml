@@ -10,8 +10,9 @@ requires = ["setuptools>=68.2,<83", "wheel"]
 [project]
 name = "imio.prometheus"
 version = "2.0.0.dev0"
-description = "Add some iMio informations on prometheus metrics view"
+description = "Add some iMio information on Prometheus metrics view"
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Plone",
     "Framework :: Plone :: 6.1",
