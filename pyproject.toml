@@ -46,7 +46,6 @@ update_locale = "imio.prometheus.locales.update:update_locale"
 test = [
     "plone.app.contenttypes[test]",
     "plone.app.testing",
-    "plone.testing",
     "zest.releaser[recommended]",
     "zestreleaser.towncrier",
 ]
