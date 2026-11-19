@@ -17,8 +17,8 @@ works without a Plone site.
 Compatibility
 -------------
 
-Version 2.x supports Plone 6.1 and 6.2 on Python 3.10 to 3.13. Use 1.0.x for
-older Plone versions and Python 2.
+Version 2.x supports Plone 6.2 on Python 3.10 to 3.14. Use 1.0.x for older
+Plone versions and Python 2.
 
 Installation
 ------------
@@ -32,7 +32,7 @@ Development
 -----------
 
 Requires `uv <https://docs.astral.sh/uv/>`_. This installs Plone 6.2.3 in
-``.venv`` (use ``PLONE_VERSION=6.1.6 make install`` for another version) and
+``.venv`` (set ``PLONE_VERSION`` for another 6.2.x release) and
 starts Zope on http://localhost:8080 (``admin`` / ``admin``)::
 
     make install
@@ -42,7 +42,7 @@ Tests and QA run through tox, as the CI does::
 
     make test        # Plone 6.2.3
     make test-all    # lint, every Plone / Python combination, dependencies
-    uvx --with tox-uv tox -e py312-plone61
+    uvx --with tox-uv tox -e py314-plone62
     make check       # format + lint (pre-commit hooks run with prek)
 
 ``.editorconfig``, ``.flake8``, ``.gitignore``, ``.pre-commit-config.yaml``,
