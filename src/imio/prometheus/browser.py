@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.prometheus.browser import Prometheus
 from plone import api
 from time import time
@@ -27,7 +26,7 @@ def metric(name, value, metric_type, help_text, labels={}):
         name,
         ",".join(
             [
-                '{0}="{1}"'.format(label_name, label_value)
+                f'{label_name}="{label_value}"'
                 for label_name, label_value in list(labels.items())
             ]
         ),
@@ -38,7 +37,7 @@ def metric(name, value, metric_type, help_text, labels={}):
 
 class ImioPrometheus(Prometheus):
     def __call__(self, *args, **kwargs):
-        metrics = super(ImioPrometheus, self).__call__(args, kwargs)
+        metrics = super().__call__(args, kwargs)
         # metrics += "".join(self.zopethreads())
         return metrics
 
@@ -56,7 +55,7 @@ class ImioPrometheus(Prometheus):
         else:
             handler_lists = ((), (), ())
         # Check the ZRendevous __init__ for the definitions below
-        busy_count, request_queue_count, free_count = [len(h) for h in handler_lists]
+        busy_count, request_queue_count, free_count = (len(h) for h in handler_lists)
         return [
             metric(
                 "zope_total_threads",
@@ -77,21 +76,21 @@ class ImioPrometheus(Prometheus):
     def _zopecache(self, db, suffix):
         return [
             metric(
-                "zope_cache_objects{0}".format(suffix),
+                f"zope_cache_objects{suffix}",
                 db.database_size(),
                 "gauge",
                 "The number of objects in the Zope cache",
                 self.labels(),
             ),
             metric(
-                "zope_cache_memory{0}".format(suffix),
+                f"zope_cache_memory{suffix}",
                 db.cache_length(),
                 "gauge",
                 "Memory used by the Zope cache",
                 self.labels(),
             ),
             metric(
-                "zope_cache_size{0}".format(suffix),
+                f"zope_cache_size{suffix}",
                 db.cache_size(),
                 "gauge",
                 "The number of objects that can be stored in the Zope cache",
@@ -140,10 +139,10 @@ class ImioPrometheus(Prometheus):
         sorted_cache_details = sorted(
             zodb.cacheDetailSize(), key=lambda m: m["connection"]
         )
-        for (conn_id, conn_data) in enumerate(sorted_cache_details):
+        for conn_id, conn_data in enumerate(sorted_cache_details):
             total = conn_data.get("size", 0)
             active = metric(
-                "zope_connection_{0}_active_objects".format(conn_id),
+                f"zope_connection_{conn_id}_active_objects",
                 conn_data.get("ngsize", 0),
                 "gauge",
                 "Active Zope Objects",
@@ -151,7 +150,7 @@ class ImioPrometheus(Prometheus):
             )
             result.append(active)
             total = metric(
-                "zope_connection_{0}_total_objects".format(conn_id),
+                f"zope_connection_{conn_id}_total_objects",
                 conn_data.get("size", 0),
                 "gauge",
                 "Total Zope Objects",

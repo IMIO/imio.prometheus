@@ -1,8 +1,9 @@
-graft src/imio
-graft docs
+graft src/imio/prometheus
+graft news
 include *.rst
-global-exclude *.pyc
 include *.GPL
-include *.txt
-include Makefile
-
+exclude mx.ini
+exclude Makefile
+exclude instance.yaml
+global-exclude *.pyc
+global-exclude .DS_Store
